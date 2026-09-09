@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akun Saya - Weather App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: #0b1329;
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 420px;
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .auth-header h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .auth-header p {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        /* Form Input */
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #cbd5e1;
+            margin-bottom: 6px;
+        }
+
+        .input-field {
+            position: relative;
+        }
+
+        .input-field i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .input-field input {
+            width: 100%;
+            padding: 12px 14px 12px 40px;
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.25s ease;
+        }
+
+        .input-field input:focus {
+            border-color: #0ea5e9;
+            box-shadow: 0 0 12px rgba(14, 165, 233, 0.3);
+            background: rgba(30, 41, 59, 0.8);
+        }
+
+        /* Tombol Utama */
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background: #0ea5e9;
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(14, 165, 233, 0.35);
+        }
+
+        .btn-submit:hover {
+            background: #0284c7;
+            transform: translateY(-1px);
+        }
+
+        .btn-logout {
+            background: #ef4444;
+            box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+        }
+
+        .btn-logout:hover {
+            background: #dc2626;
+        }
+
+        /* Toggle Bawah */
+        .auth-toggle {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        .auth-toggle a {
+            color: #38bdf8;
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 4px;
+        }
+
+        .auth-toggle a:hover {
+            text-decoration: underline;
+        }
+
+        /* Halaman Profile (Saat Sudah Login) */
+        .user-card {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .avatar {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #0ea5e9, #ea580c);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin: 0 auto 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-container">
+        
+        <!-- 1. FORM MASUK (LOGIN) -->
+        <div id="login-form">
+            <div class="auth-header">
+                <h2>Selamat Datang</h2>
+                <p>Masukkan akun Anda untuk melanjutkan</p>
+            </div>
+            <form onsubmit="handleLogin(event)">
+                <div class="input-group">
+                    <label>Email</label>
+                    <div class="input-field">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="login-email" placeholder="nama@email.com" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Kata Sandi</label>
+                    <div class="input-field">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="login-password" placeholder="••••••••" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn-submit">Masuk</button>
+            </form>
+            <div class="auth-toggle">
+                Belum punya akun? <a href="#" onclick="switchForm('register')">Daftar</a>
+            </div>
+        </div>
+
+        <!-- 2. FORM DAFTAR (REGISTER) -->
+        <div id="register-form" class="hidden">
+            <div class="auth-header">
+                <h2>Buat Akun Baru</h2>
+                <p>Lengkapi data di bawah ini</p>
+            </div>
+            <form onsubmit="handleRegister(event)">
+                <div class="input-group">
+                    <label>Nama Lengkap</label>
+                    <div class="input-field">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="reg-name" placeholder="Nama Anda" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Email</label>
+                    <div class="input-field">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="reg-email" placeholder="nama@email.com" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Kata Sandi</label>
+                    <div class="input-field">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="reg-password" placeholder="••••••••" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn-submit">Daftar Akun</button>
+            </form>
+            <div class="auth-toggle">
+                Sudah punya akun? <a href="#" onclick="switchForm('login')">Masuk</a>
+            </div>
+        </div>
+
+        <!-- 3. TAMPILAN PROFILE (SAAT SUDAH LOGIN) -->
+        <div id="user-profile" class="hidden">
+            <div class="user-card">
+                <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                <h2 id="profile-name">Pengguna</h2>
+                <p id="profile-email" style="color: #94a3b8; font-size: 13px; margin-bottom: 20px;">email@domain.com</p>
+                <button onclick="handleLogout()" class="btn-submit btn-logout">Keluar Akun</button>
+                <div class="auth-toggle" style="margin-top: 15px;">
+                    <a href="index.html">← Kembali ke Dashboard Cuaca</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Cek status login saat halaman dimuat
+        document.addEventListener("DOMContentLoaded", () => {
+            const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+            if (currentUser) {
+                showProfile(currentUser);
+            }
+        });
+        // Pindah antara Form Login & Register
+        function switchForm(target) {
+            if (target === 'register') {
+                document.getElementById("login-form").classList.add("hidden");
+                document.getElementById("register-form").classList.remove("hidden");
+            } else {
+                document.getElementById("register-form").classList.add("hidden");
+                document.getElementById("login-form").classList.remove("hidden");
+            }
+        }
+
+        // Proses Login
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById("login-email").value;
+            const name = email.split('@')[0]; // Mengambil nama dari email
+
+            const userData = { name: name, email: email };
+            localStorage.setItem("currentUser", JSON.stringify(userData));
+            
+            showProfile(userData);
+        }
+        // Proses Register
+        function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById("reg-name").value;
+            const email = document.getElementById("reg-email").value;
+
+            const userData = { name: name, email: email };
+            localStorage.setItem("currentUser", JSON.stringify(userData));
+            
+            showProfile(userData);
+        }
+        // Tampilkan Tampilan Pengguna
+        function showProfile(user) {
+            document.getElementById("login-form").classList.add("hidden");
+            document.getElementById("register-form").classList.add("hidden");
+            document.getElementById("user-profile").classList.remove("hidden");
+
+            document.getElementById("profile-name").innerText = user.name;
+            document.getElementById("profile-email").innerText = user.email;
+        }
+        // Proses Keluar Akun (Logout)
+        function handleLogout() {
+            localStorage.removeItem("currentUser");
+            document.getElementById("user-profile").classList.add("hidden");
+            document.getElementById("login-form").classList.remove("hidden");
+        }
+    </script>
+</body>
+</html>
